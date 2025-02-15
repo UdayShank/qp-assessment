@@ -1,0 +1,32 @@
+version: "1.0"
+
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: grocerydb
+      MYSQL_USER: username
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: mypassword
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  grocery-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grocery-app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/grocerydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: mypassword
+      LOGGING_LEVEL_ROOT: INFO
+    ports:
+      - "8088:8088"
+    links:
+      - mysql

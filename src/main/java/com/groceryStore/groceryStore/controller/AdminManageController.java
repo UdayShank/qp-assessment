@@ -48,9 +48,9 @@ public class AdminManageController {
         return new ResponseEntity<>(getGroceryIteamResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{item_id}")
+    @DeleteMapping
     @PreAuthorize("hasAuthority('admin:delete')")
-    public ResponseEntity<Void> deleteGroceryItem(@PathVariable("/{item_id}") @Valid Integer Id){
+    public ResponseEntity<Void> deleteGroceryItem(@RequestParam("item_id") @Valid Integer Id){
         groceryService.deleteIteamById(Id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
